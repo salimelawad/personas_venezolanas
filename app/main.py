@@ -13,10 +13,10 @@ def main():
 
     # ask for optional filters
     cedula = st.text_input('Cedula')
-    primer_nombre = st.text_input('Primer Nombre')
-    segundo_nombre = st.text_input('Segundo Nombre')
-    primer_apellido = st.text_input('Primer Apellido')
-    segundo_apellido = st.text_input('Segundo Apellido')
+    primer_nombre = st.text_input('Primer Nombre').strip()
+    segundo_nombre = st.text_input('Segundo Nombre').strip()
+    primer_apellido = st.text_input('Primer Apellido').strip()
+    segundo_apellido = st.text_input('Segundo Apellido').strip()
 
     # filter the dataframe based on the provided filters
 
