@@ -9,6 +9,7 @@ from database import read_from_sqlite3
 
 
 def main():
+    st.set_page_config(page_title='Buscador de Venezolano', page_icon='🇻🇪', layout='wide')
     st.title('Buscador de Venezolano')
 
     # ask for optional filters
@@ -31,6 +32,6 @@ def main():
     filtered_df = read_from_sqlite3(filters)
 
     # show the filtered dataframe
-    st.write(filtered_df)
+    st.dataframe(filtered_df, hide_index=True)
 
 main()
