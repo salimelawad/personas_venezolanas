@@ -1,5 +1,6 @@
 import pandas as pd
 import duckdb
+import os
 
 def read_registro():
     df = pd.read_csv('data/registro_electoral_nacional.csv', on_bad_lines='warn')
@@ -13,6 +14,33 @@ def read_resultados():
 def resultados_to_csv():
     df = read_resultados()
     df.to_csv('data/resultados.csv', index=False)
+
+def split_csv_file(file, size):
+    if not os.path.exists('data/registro/'):
+        os.makedirs('data/registro/')
+
+    with open(file, 'r') as f:
+        header = f.readline()
+        rows = []
+        current_size = 0
+        part = 0
+
+        for line in f:
+            rows.append(line)
+            current_size += len(line.encode('utf-8'))
+            if current_size >= size:
+                with open(f'data/registro/split_{part}.csv', 'w') as split_file:
+                    split_file.write(header)
+                    split_file.writelines(rows)
+                rows = []
+                current_size = 0
+                part += 1
+
+        if rows:
+            with open(f'data/registro/split_{part}.csv', 'w') as split_file:
+                split_file.write(header)
+                split_file.writelines(rows)
+
 
 def read_from_duckdb(filters: dict):
     WHERES = " ".join([f"AND {key} ILIKE  '%{value}%'" for key, value in filters.items() if value != ''])
@@ -29,7 +57,7 @@ def read_from_duckdb(filters: dict):
 
     con = duckdb.connect()
     # Read the CSV file with duckdb, ignoring errors
-    con.execute("CREATE TABLE registro AS SELECT * FROM read_csv_auto('data/registro_electoral_nacional.csv', ignore_errors=True)")
+    con.execute("CREATE TABLE registro AS SELECT * FROM read_csv_auto('data/registro/*.csv', ignore_errors=True)")
     con.execute("CREATE TABLE resultados AS SELECT * FROM read_csv_auto('data/resultados.csv', ignore_errors=True)")
 
     data = con.execute(query).df()
@@ -40,3 +68,4 @@ def read_from_duckdb(filters: dict):
 
 if __name__ == '__main__':
     resultados_to_csv()
+    split_csv_file('data/registro_electoral_nacional.csv', 50_000_000)
