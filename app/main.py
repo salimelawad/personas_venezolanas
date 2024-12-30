@@ -28,6 +28,6 @@ def main():
     filtered_df = read_from_duckdb(filters)
 
     # show the filtered dataframe
-    st.dataframe(filtered_df, hide_index=True)
+    st.dataframe(filtered_df, hide_index=True, use_container_width=True)
 
 main()
