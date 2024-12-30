@@ -57,6 +57,7 @@ def read_from_duckdb(filters: dict):
 
     con = duckdb.connect()
     # Read the CSV file with duckdb, ignoring errors
+    con.execute("PRAGMA memory_limit='.5GB'")
     con.execute("CREATE TABLE registro AS SELECT * FROM read_csv_auto('data/registro/*.csv', ignore_errors=True)")
     con.execute("CREATE TABLE resultados AS SELECT * FROM read_csv_auto('data/resultados.csv', ignore_errors=True)")
 
