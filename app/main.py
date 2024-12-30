@@ -1,10 +1,6 @@
 import pandas as pd
 import streamlit as st
-from database import read_from_sqlite3
-
-# load the csv file. Some rows may have extra commans, causing pandas to fail
-# df = pd.read_csv('registro_electoral_nacional.csv'
-
+from database import read_from_duckdb
 
 
 
@@ -29,7 +25,7 @@ def main():
         'segundo_apellido': segundo_apellido,
     }
 
-    filtered_df = read_from_sqlite3(filters)
+    filtered_df = read_from_duckdb(filters)
 
     # show the filtered dataframe
     st.dataframe(filtered_df, hide_index=True)
