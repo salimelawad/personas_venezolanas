@@ -61,7 +61,7 @@ def read_from_duckdb(filters: dict):
     con.execute("CREATE TABLE registro AS SELECT * FROM read_csv_auto('data/registro/*.csv', ignore_errors=True)")
     con.execute("CREATE TABLE resultados AS SELECT * FROM read_csv_auto('data/resultados.csv', ignore_errors=True)")
 
-    data = con.execute(query).df()
+    data = con.execute(query).fetchdf()
 
     return data
 
